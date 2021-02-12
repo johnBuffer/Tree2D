@@ -169,7 +169,7 @@ namespace v2
 		void initializePhysics()
 		{
 			segment = PhysicSegment(nodes.front().position, nodes.back().position);
-			const float joint_strength(4000.0f * std::pow(0.4f, level));
+			const float joint_strength(4000.0f * std::powf(0.4f, float(level)));
 			segment.direction = segment.direction * joint_strength;
 		}
 	};
@@ -374,9 +374,9 @@ namespace v2
 			uint32_t branch_id = 0;
 			for (const Branch& b : branches) {
 				const uint64_t nodes_count = b.nodes.size() - 1;
-				const uint64_t leafs_count = 10;
-				int32_t node_id = nodes_count;
-				for (uint64_t i(0); i < leafs_count; ++i) {
+				const uint32_t leafs_count = 10;
+				int32_t node_id = static_cast<int32_t>(nodes_count);
+				for (uint32_t i(0); i < leafs_count; ++i) {
 					node_id -= i;
 					if (node_id < 0) {
 						break;

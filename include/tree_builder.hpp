@@ -1,5 +1,5 @@
 #pragma once
-#include "tree_2.hpp"
+#include "tree.hpp"
 #include "number_generator.hpp"
 #include "utils.hpp"
 
@@ -102,7 +102,7 @@ namespace v2
 			}
 
 			for (const GrowthResult& res : to_add) {
-				tree.branches[res.root.branch_id].nodes[res.root.node_id].branch_id = tree.branches.size();
+				tree.branches[res.root.branch_id].nodes[res.root.node_id].branch_id = static_cast<uint32_t>(tree.branches.size());
 				tree.branches.emplace_back(res.node, res.level);
 			}
 		}

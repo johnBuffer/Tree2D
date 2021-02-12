@@ -7,8 +7,8 @@
 #include "tree_renderer.hpp"
 #include "wind.hpp"
 
-#include "tree_2.hpp"
-#include "tree_builder_2.hpp"
+#include "tree.hpp"
+#include "tree_builder.hpp"
 
 
 int main()
@@ -151,17 +151,17 @@ int main()
 
 		sf::Clock profiler_clock;
 		tree.updateBranches(dt);
-		const float elapsed_b = profiler_clock.getElapsedTime().asMicroseconds();
+		const float elapsed_b = static_cast<float>(profiler_clock.getElapsedTime().asMicroseconds());
 		time_sum_branches += elapsed_b;
 
 		profiler_clock.restart();
 		tree.updateLeaves(dt);
-		const float elapsed_l = profiler_clock.getElapsedTime().asMicroseconds();
+		const float elapsed_l = static_cast<float>(profiler_clock.getElapsedTime().asMicroseconds());
 		time_sum_leaves += elapsed_l;
 
 		profiler_clock.restart();
 		tree.updateRest();
-		const float elapsed_r = profiler_clock.getElapsedTime().asMicroseconds();
+		const float elapsed_r = static_cast<float>(profiler_clock.getElapsedTime().asMicroseconds());
 		time_sum_rest += elapsed_r;
 
 
@@ -212,7 +212,7 @@ int main()
 
 			i = 0;
 			for (const v2::Branch& b : tree.branches) {
-				const float joint_strength(4000.0f * std::pow(0.4f, b.level));
+				const float joint_strength(4000.0f * std::powf(0.4f, float(b.level)));
 				const float length = joint_strength * 0.03f;
 				sf::Vector2f bot(b.segment.moving_point.position.x, b.segment.moving_point.position.y);
 				const Vec2& dir = b.segment.direction.getNormalized();

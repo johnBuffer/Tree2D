@@ -36,11 +36,11 @@ float getRandUnder(float max)
 	return val;
 }
 
-
-std::string toString(float f, bool truncate = false)
+template<typename T>
+std::string toString(T v, bool truncate = false)
 {
 	std::stringstream sx;
-	sx << f;
+	sx << v;
 
 	if (truncate) {
 		return sx.str().substr(0, 4);

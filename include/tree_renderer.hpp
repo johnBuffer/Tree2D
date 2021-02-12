@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "tree_2.hpp"
+#include "tree.hpp"
 
 
 class TreeRenderer
