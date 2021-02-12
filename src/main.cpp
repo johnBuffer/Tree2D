@@ -156,7 +156,7 @@ int main()
 		time_sum_leaves += elapsed_l;
 
 		profiler_clock.restart();
-		tree.updateRest();
+		tree.updateStructure();
 		const float elapsed_r = static_cast<float>(profiler_clock.getElapsedTime().asMicroseconds());
 		time_sum_rest += elapsed_r;
 

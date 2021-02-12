@@ -283,7 +283,7 @@ namespace v2
 			}
 		}
 
-		void updateRest()
+		void updateStructure()
 		{
 			for (Branch& b : branches) {
 				rotateBranchTarget(b);
@@ -304,7 +304,7 @@ namespace v2
 			// Leaves physics
 			updateLeaves(dt);
 			// Apply resulting transformations
-			updateRest();
+			updateStructure();
 		}
 
 		void applyWind(const std::vector<Wind>& wind)
