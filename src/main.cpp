@@ -46,14 +46,10 @@ int main()
 	text_profiler.setFont(font);
 	text_profiler.setFillColor(sf::Color::White);
 	text_profiler.setCharacterSize(24);
-	float text_y = 10.0f;
-	text_profiler.setPosition(10.0f, text_y);
-
 
 	std::vector<sf::VertexArray> branches_va;
 	sf::VertexArray leaves_va(sf::Quads);
 	v2::Tree tree = v2::TreeBuilder::build(Vec2(WinWidth * 0.5f, WinHeight), tree_conf);
-
 
 	float base_wind_force = 0.05f;
 	float max_wind_force = 30.0f;
@@ -164,11 +160,10 @@ int main()
 		const float elapsed_r = static_cast<float>(profiler_clock.getElapsedTime().asMicroseconds());
 		time_sum_rest += elapsed_r;
 
-
 		window.clear(sf::Color::Black);
 
 		const float text_offset = 24.0f;
-		text_y = 10.0f;
+		float text_y = 10.0f;
 		text_profiler.setString("Structure simulation    " + toString(int(time_sum_branches / img_count)) + " µs");
 		text_profiler.setPosition(10.0f, text_y);
 		window.draw(text_profiler);
