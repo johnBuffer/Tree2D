@@ -22,6 +22,9 @@ int main()
     sf::RenderWindow window(sf::VideoMode(WinWidth, WinHeight), "Tree", sf::Style::Default, settings);
 	window.setFramerateLimit(60);
 
+	//
+	// Perf: 0.36 ms
+
 	v2::TreeConf tree_conf{
 		80.0f, // branch_width
 		0.95f, // branch_width_ratio

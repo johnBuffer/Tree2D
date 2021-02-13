@@ -79,6 +79,7 @@ namespace v2
 			: position()
 			, last_position()
 			, index(0)
+			, length(0.0f)
 			, width(1.0f)
 			, branch_id(0)
 		{}

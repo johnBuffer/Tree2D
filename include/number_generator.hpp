@@ -14,7 +14,7 @@ public:
 	NumberGenerator()
 		: rd()
 		, dis(0.0f, 1.0f)
-		, gen(rd())
+		, gen(0)
 		
 	{}
 	
