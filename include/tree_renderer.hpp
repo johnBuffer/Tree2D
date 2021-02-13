@@ -43,15 +43,16 @@ public:
 		// Create branches
 		branches_va.clear();
 		for (const v2::Branch& b : tree.branches) {
-			branches_va.emplace_back(sf::TriangleStrip, b.nodes.size() * 2);
+			const uint64_t nodes_count = b.nodes.size() - 1;
+			branches_va.emplace_back(sf::TriangleStrip, nodes_count * 2);
 			sf::VertexArray& va = branches_va.back();
-			uint64_t i(0);
-			for (const v2::Node& n : b.nodes) {
+			for (uint64_t i(0); i < nodes_count; ++i) {
+				const v2::Node& n = b.nodes[i];
+				const v2::Node& next_n = b.nodes[i+1];
 				const float width = 0.5f * n.width;
-				const Vec2 n_vec = n.direction.getNormal() * width;
+				const Vec2 n_vec = (next_n.position - n.position).getNormalized().getNormal() * width;
 				va[2 * i].position = sf::Vector2f(n.position.x + n_vec.x, n.position.y + n_vec.y);
 				va[2 * i + 1].position = sf::Vector2f(n.position.x - n_vec.x, n.position.y - n_vec.y);
-				++i;
 			}
 		}
 

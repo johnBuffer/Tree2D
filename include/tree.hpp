@@ -68,30 +68,18 @@ namespace v2
 	{
 		Vec2 position;
 		Vec2 last_position;
-		Vec2 direction;
-		uint32_t index;
-		float length;
 		float width;
-		// Connected branch
-		uint32_t branch_id;
 
 		Node()
 			: position()
 			, last_position()
-			, index(0)
-			, length(0.0f)
 			, width(1.0f)
-			, branch_id(0)
 		{}
 
-		Node(const Vec2& pos, const Vec2& dir, uint32_t i, float l, float w, uint32_t connected_branch = 0)
+		Node(Vec2 pos, float w)
 			: position(pos)
 			, last_position(pos)
-			, direction(dir)
-			, index(i)
-			, length(l)
 			, width(w)
-			, branch_id(connected_branch)
 		{}
 
 		void resetPositionDelta()
@@ -102,11 +90,6 @@ namespace v2
 		Vec2 getDelta() const
 		{
 			return position - last_position;
-		}
-
-		Vec2 getEnd() const
-		{
-			return position + direction * length;
 		}
 	};
 
@@ -123,7 +106,7 @@ namespace v2
 		{
 		}
 
-		NodeRef(uint32_t branch, uint32_t node, Vec2 pos)
+		NodeRef(uint32_t branch, uint32_t node, Vec2 pos = Vec2())
 			: branch_id(branch)
 			, node_id(node)
 			, position(pos)
@@ -137,14 +120,16 @@ namespace v2
 		uint32_t level;
 		// Physics
 		PhysicSegment segment;
+		NodeRef root;
 
 		Branch()
 			: level(0)
 		{}
 
-		Branch(const Node& node, uint32_t lvl)
+		Branch(const Node& node, uint32_t lvl, uint32_t root_branch_id = 0, uint32_t root_node_id = 0)
 			: nodes{node}
 			, level(lvl)
+			, root(root_branch_id, root_node_id)
 		{}
 
 		void update(float dt)
@@ -333,12 +318,13 @@ namespace v2
 		void translateBranch(Branch& b, const Vec2& v)
 		{
 			b.translate(v);
-			for (Node& n : b.nodes) {
+			// To be replaced with "pull" approach
+			/*for (Node& n : b.nodes) {
 				if (n.branch_id) {
 					const Vec2 delta = n.getDelta();
 					translateBranch(branches[n.branch_id], delta);
 				}
-			}
+			}*/
 		}
 
 		Node& getNode(const NodeRef& ref)
