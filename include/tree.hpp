@@ -275,7 +275,7 @@ namespace v2
 				rotateBranchTarget(b);
 			}
 			// Apply resulting translations
-			translateBranch(branches.front(), Vec2());
+			translateBranches();
 			translateLeaves();
 			// Finalize update
 			for (Branch& b : branches) {
@@ -315,16 +315,16 @@ namespace v2
 			}
 		}
 
-		void translateBranch(Branch& b, const Vec2& v)
+		void translateBranches()
 		{
-			b.translate(v);
-			// To be replaced with "pull" approach
-			/*for (Node& n : b.nodes) {
-				if (n.branch_id) {
-					const Vec2 delta = n.getDelta();
-					translateBranch(branches[n.branch_id], delta);
-				}
-			}*/
+			uint64_t branches_count = branches.size();
+			for (uint64_t i(1); i < branches_count; ++i) {
+				// To be replaced with "pull" approach
+				Branch& b = branches[i];
+				const Node& root = branches[b.root.branch_id].nodes[b.root.node_id];
+				const Vec2 delta = root.position - b.nodes[0].position;
+				b.translate(delta);
+			}
 		}
 
 		Node& getNode(const NodeRef& ref)
