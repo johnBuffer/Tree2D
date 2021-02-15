@@ -56,6 +56,15 @@ struct Vec2
 		return Vec2(x / length, y / length);
 	}
 
+	float normalize()
+	{
+		const float length = getLength();
+		const float inv = 1.0f / length;
+		x *= inv;
+		y *= inv;
+		return length;
+	}
+
 	Vec2 getNormal() const
 	{
 		return Vec2(-y, x);

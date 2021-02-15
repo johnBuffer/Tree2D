@@ -77,8 +77,8 @@ namespace v2
 						split_angle = -split_angle;
 					}
 					result.root.node_id = index;
+					result.root.position = new_node.position;
 					result.node.position = start;
-					result.node.last_position = start;
 					result.sfd_node.direction = Vec2::getRotated(direction, split_angle);
 					result.sfd_node.length = new_length * conf.branch_length_ratio;
 					result.node.width = new_width * conf.split_width_ratio;
@@ -112,7 +112,28 @@ namespace v2
 			for (const GrowthResult& res : to_add) {
 				//tree.branches[res.root.branch_id].nodes[res.root.node_id].branch_id = static_cast<uint32_t>(tree.branches.size());
 				sfd_tree.branches.emplace_back(res.sfd_node);
-				tree.branches.emplace_back(res.node, res.level, res.root.branch_id, res.root.node_id);
+				tree.branches.emplace_back(res.node, res.level, res.root);
+			}
+		}
+
+		static void addLeaves(Tree& tree)
+		{
+			uint32_t branch_id = 0;
+			for (const Branch& b : tree.branches) {
+				const uint64_t nodes_count = b.nodes.size() - 1;
+				const uint32_t leafs_count = 10;
+				int32_t node_id = static_cast<int32_t>(nodes_count);
+				for (uint32_t i(0); i < leafs_count; ++i) {
+					node_id -= i;
+					if (node_id < 0) {
+						break;
+					}
+					const float angle = RNGf::getRange(2.0f * PI);
+					const NodeRef anchor(branch_id, node_id, b.nodes[node_id].position);
+					tree.leaves.emplace_back(anchor, Vec2(cos(angle), sin(angle)));
+					tree.leaves.back().size = 1.0f + (0.5f * i / float(leafs_count));
+				}
+				++branch_id;
 			}
 		}
 
@@ -134,8 +155,8 @@ namespace v2
 				nodes_count = tree.getNodesCount();
 			}
 			// Add physic and leaves
+			addLeaves(tree);
 			tree.generateSkeleton();
-			tree.addLeaves();
 
 			return tree;
 		}
