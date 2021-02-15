@@ -39,7 +39,7 @@ int main()
 		0.5f, // branch_split_proba;
 		0.0f, // double split
 		Vec2(0.0f, -0.5f), // Attraction
-		8
+		4
 	};
 
 	sf::Texture texture;
@@ -198,6 +198,7 @@ int main()
 				window.draw(va);
 			}
 		}
+		
 		if (draw_leaves) {
 			sf::RenderStates states;
 			states.texture = &texture;

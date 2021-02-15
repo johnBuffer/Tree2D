@@ -145,6 +145,7 @@ namespace v2
 			sfd_tree.branches.emplace_back(scaffold::Node(Vec2(0.0f, -1.0f), conf.branch_length, 0, 0));
 			Tree tree;
 			tree.branches.emplace_back(root, 0);
+			tree.branches.front().root.position = position;
 			// Build the tree
 			uint64_t nodes_count = 0;
 			while (true) {
@@ -155,6 +156,7 @@ namespace v2
 				nodes_count = tree.getNodesCount();
 			}
 			// Add physic and leaves
+			tree.branches_count = tree.branches.size();
 			addLeaves(tree);
 			tree.generateSkeleton();
 

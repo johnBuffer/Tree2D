@@ -50,9 +50,8 @@ namespace v2
 		{
 			const Vec2 delta = moving_point.position - attach_point;
 			const float dist = delta.getLength();
-			const float dist_delta = length - dist;
-			const float inv_dist = 1.0f / dist;
-			moving_point.move(Vec2(delta.x * inv_dist * dist_delta, delta.y * inv_dist * dist_delta));
+			const float inv_dist = (length - dist) / dist;
+			moving_point.move(Vec2(delta.x * inv_dist, delta.y * inv_dist));
 		}
 
 		void update(float dt)
@@ -108,19 +107,23 @@ namespace v2
 		// Physics
 		PhysicSegment segment;
 		NodeRef root;
+		float acc_angle_delta;
 
 		Branch()
 			: level(0)
+			, acc_angle_delta(0.0f)
 		{}
 
 		Branch(const Node& node, uint32_t lvl, const NodeRef& root_ref = NodeRef())
 			: nodes{node}
 			, level(lvl)
 			, root(root_ref)
+			, acc_angle_delta(0.0f)
 		{}
 
 		void update(float dt)
 		{
+			acc_angle_delta = 0.0f;
 			segment.update(dt);
 		}
 
@@ -139,10 +142,25 @@ namespace v2
 			translate(delta);
 		}
 
+		void rotate()
+		{
+			acc_angle_delta += segment.delta_angle;
+			const RotMat2 mat(segment.delta_angle);
+			for (Node& n : nodes) {
+				n.position.rotate(root.position, mat);
+			}
+		}
+
+		void rotateTarget(float angle)
+		{
+			const RotMat2 mat(angle);
+			segment.direction.rotate(Vec2(), mat);
+		}
+
 		void initializePhysics()
 		{
 			segment = PhysicSegment(nodes.front().position, nodes.back().position);
-			const float joint_strength(4000.0f * std::powf(0.4f, float(level)));
+			const float joint_strength(1000.0f * std::powf(0.7f, float(level)));
 			segment.direction = segment.direction * joint_strength;
 		}
 	};
@@ -241,6 +259,7 @@ namespace v2
 	{
 		std::vector<Branch> branches;
 		std::vector<Leaf> leaves;
+		uint64_t branches_count;
 
 		Tree() = default;
 
@@ -292,22 +311,20 @@ namespace v2
 		void rotateBranches()
 		{
 			for (Branch& b : branches) {
-				rotateBranchTarget(b);
+				b.rotate();
 			}
-		}
 
-		void rotateBranchTarget(Branch& b)
-		{
-			const RotMat2 mat(b.segment.delta_angle);
-			const Vec2 origin = b.nodes.front().position;
-			for (Node& n : b.nodes) {
-				n.position.rotate(origin, mat);
+			for (uint64_t i(1); i < branches_count; ++i) {
+				Branch& b = branches[i];
+				const Branch& rb = branches[b.root.branch_id];
+				const float delta_ratio = 0.2f;
+				b.rotateTarget(rb.acc_angle_delta * delta_ratio);
+				b.acc_angle_delta += rb.acc_angle_delta;
 			}
 		}
 
 		void translateBranches()
 		{
-			uint64_t branches_count = branches.size();
 			for (uint64_t i(1); i < branches_count; ++i) {
 				Branch& b = branches[i];
 				b.translateTo(getNode(b.root).position);
