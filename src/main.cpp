@@ -24,6 +24,8 @@ int main()
 
 	// 9f0f269
 	// Perf: 0.36 ms
+	// b01e334
+	// Perf: 0.25 ms
 
 	v2::TreeConf tree_conf{
 		80.0f, // branch_width
@@ -75,7 +77,8 @@ int main()
 
 	bool boosting = false;
 
-	bool draw_leaves = false;
+	bool draw_branches = true;
+	bool draw_leaves = true;
 	bool draw_debug = false;
 	bool draw_wind_debug = false;
 
@@ -91,6 +94,9 @@ int main()
 			} else if (event.type == sf::Event::KeyReleased) {
 				if (event.key.code == sf::Keyboard::Space) {
 					tree = v2::TreeBuilder::build(Vec2(WinWidth * 0.5f, WinHeight), tree_conf);
+				}
+				else if (event.key.code == sf::Keyboard::B) {
+					draw_branches = !draw_branches;
 				}
 				else if (event.key.code == sf::Keyboard::L) {
 					draw_leaves = !draw_leaves;
@@ -187,8 +193,10 @@ int main()
 		window.draw(text_profiler);
 
 		TreeRenderer::generateRenderData(tree, branches_va, leaves_va);
-		for (const auto& va : branches_va) {
-			window.draw(va);
+		if (draw_branches) {
+			for (const auto& va : branches_va) {
+				window.draw(va);
+			}
 		}
 		if (draw_leaves) {
 			sf::RenderStates states;
