@@ -314,13 +314,13 @@ namespace v2
 				b.rotate();
 			}
 
-			for (uint64_t i(1); i < branches_count; ++i) {
+			/*for (uint64_t i(1); i < branches_count; ++i) {
 				Branch& b = branches[i];
 				const Branch& rb = branches[b.root.branch_id];
 				const float delta_ratio = 0.2f;
 				b.rotateTarget(rb.acc_angle_delta * delta_ratio);
 				b.acc_angle_delta += rb.acc_angle_delta;
-			}
+			}*/
 		}
 
 		void translateBranches()
