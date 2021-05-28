@@ -173,17 +173,17 @@ int main()
 
 		const float text_offset = 24.0f;
 		float text_y = 10.0f;
-		text_profiler.setString("Structure simulation    " + toString(int(time_sum_branches / img_count)) + " µs");
+		text_profiler.setString("Structure simulation    " + toString(int(time_sum_branches / img_count)) + " us");
 		text_profiler.setPosition(10.0f, text_y);
 		window.draw(text_profiler);
 		text_y += text_offset;
 
-		text_profiler.setString("Leaves simulation       " + toString(int(time_sum_leaves / img_count)) + " µs");
+		text_profiler.setString("Leaves simulation       " + toString(int(time_sum_leaves / img_count)) + " us");
 		text_profiler.setPosition(10.0f, text_y);
 		window.draw(text_profiler);
 		text_y += text_offset;
 
-		text_profiler.setString("Structure update        " + toString(int(time_sum_rest / img_count)) + " µs");
+		text_profiler.setString("Structure update        " + toString(int(time_sum_rest / img_count)) + " us");
 		text_profiler.setPosition(10.0f, text_y);
 		window.draw(text_profiler);
 		text_y += 2.0f * text_offset;
